@@ -20,9 +20,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
+				fetch('https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts')
+        		.then(response => response.json())
+        		.then(data => console.log(data));
+			},
+			addContact: () => {
+				const requestOptions = {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify( {
+						"name": "example2",
+						"phone": "as",
+						"email": "de",
+						"address": "as"
+					  } )
+				};
+				fetch('https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts', requestOptions)
+					.then(response => response.json())
+					.then(data => console.log("Contacto añadido"));
 			},
 			changeColor: (index, color) => {
 				//get the store
@@ -36,7 +51,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 
 				//reset the global store
-				setStore({ demo: demo });
+				//setStore({ demo: demo });
 			}
 		}
 	};
