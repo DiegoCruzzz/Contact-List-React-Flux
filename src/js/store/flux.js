@@ -12,46 +12,56 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
+			],
+			contacts: [
+				{
+					"name": "example1",
+					"phone": "as",
+					"email": "de",
+					"address": "as",
+				},
+				{
+					"name": "example2",
+					"phone": "as",
+					"email": "de",
+					"address": "as",
+				}
 			]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+			
 			loadSomeData: () => {
 				fetch('https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts')
         		.then(response => response.json())
-        		.then(data => console.log(data));
+        		.then(data => {
+					console.log(data);
+					const store = getStore();
+					setStore({contacts:data.contacts})
+					console.log(store.contacts)
+				});
 			},
-			addContact: () => {
+			addContact: (newContact) => {
 				const requestOptions = {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify( {
-						"name": "example2",
-						"phone": "as",
-						"email": "de",
-						"address": "as"
-					  } )
+					body: JSON.stringify( 
+						newContact
+					   )
 				};
 				fetch('https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts', requestOptions)
 					.then(response => response.json())
 					.then(data => console.log("Contacto añadido"));
 			},
-			changeColor: (index, color) => {
-				//get the store
+			deleteContact: (index) => {
 				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				//setStore({ demo: demo });
+				let idToDelete = store.contacts[index].id;
+				console.log("Se borrara: " + idToDelete)
+				setStore({contacts : store.contacts.filter( (contactos,indx)=>indx!=index) });
+					
+				fetch('https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts/'+idToDelete, { method: 'DELETE' })
+					.then(response => console.log("Se borro " + idToDelete));
+					
 			}
 		}
 	};
