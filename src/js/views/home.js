@@ -46,6 +46,9 @@ export const Home = () => {
 						</div>
 
 						<div className="col p-auto">
+							<Link to={`/single?index=${index}`}>
+								<button type="button" class="btn btn-warning mx-3">Modificar</button>
+							</Link>
 							<button type="button" class="btn btn-danger" onClick={()=>actions.deleteContact(index)}>Eliminar</button>
 						</div>
 					</div>

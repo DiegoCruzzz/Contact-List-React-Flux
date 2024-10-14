@@ -1,3 +1,5 @@
+import { string } from "prop-types";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -26,6 +28,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					"email": "de",
 					"address": "as",
 				}
+			],
+			mod: [
+				
 			]
 		},
 		actions: {
@@ -41,6 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(store.contacts)
 				});
 			},
+
 			addContact: (newContact) => {
 				const requestOptions = {
 					method: 'POST',
@@ -53,6 +59,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(response => response.json())
 					.then(data => console.log("Contacto añadido"));
 			},
+
 			deleteContact: (index) => {
 				const store = getStore();
 				let idToDelete = store.contacts[index].id;
@@ -62,7 +69,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch('https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts/'+idToDelete, { method: 'DELETE' })
 					.then(response => console.log("Se borro " + idToDelete));
 					
-			}
+			},
+
+			modContact: (contactModif,id) => {
+				
+				console.log("id a modiifcar : " + id)
+				const requestOptions = {
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify( 
+						contactModif
+					   )
+				};
+				fetch("https://playground.4geeks.com/contact/agendas/diegocruzzz/contacts/" + id, requestOptions)
+					.then(response => response.json())
+					.then(data => console.log("Contacto modificado"));
+			},
+			
 		}
 	};
 };

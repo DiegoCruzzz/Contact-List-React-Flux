@@ -1,26 +1,108 @@
 import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 import { Context } from "../store/appContext";
 
-export const Single = props => {
+import "../../styles/demo.css";
+
+export const Single = () => {
 	const { store, actions } = useContext(Context);
-	const params = useParams();
-	return (
-		<div className="jumbotron">
-			<h1 className="display-4">This will show the demo element: {store.demo[params.theid].title}</h1>
 
-			<hr className="my-4" />
+	const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const index = queryParams.get("index"); 
 
-			<Link to="/">
-				<span className="btn btn-primary btn-lg" href="#" role="button">
-					Back home
-				</span>
-			</Link>
-		</div>
-	);
-};
+	let id = store.contacts[index].id;
 
-Single.propTypes = {
-	match: PropTypes.object
+    const [formDataMod, setFormDataMod] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        address: ''
+    });
+
+    const handleSubmit = (i) => {
+        i.preventDefault();
+		actions.modContact(formDataMod,id);
+        setFormDataMod({
+            name: '',
+            phone: '',
+            email: '',
+            address: ''
+        });
+    };
+
+
+    return (
+        <div className="p-3 m-auto w-75">
+            <div>
+				<h1 className="mx-auto">Modificacion de un contacto</h1>
+				<Link to="/" className="">
+					<button type="button" class="btn btn-info">Volver</button>
+				</Link>
+			</div>
+			
+			<div>
+				<form onSubmit={handleSubmit}>
+					
+					<div className="form-group p-1">
+						<label for="exampleInputEmail2">Nombre completo</label>
+						<input
+							type="text"
+							name="name"
+							placeholder="Nombre"
+							value={formDataMod.name}
+							onChange={(i) => setFormDataMod({ ...formDataMod, name: i.target.value })}
+							required
+							className="form-control"
+						/>
+					</div>
+
+					<div className="form-group">
+						<label for="exampleInputPassword2">Telefono</label>
+						<input
+							type="text"
+							name="phone"
+							placeholder="Teléfono"
+							value={formDataMod.phone}
+							onChange={(i) => setFormDataMod({ ...formDataMod, phone: i.target.value })}
+							required
+							className="form-control"
+						/>
+					</div>
+					
+					<div className="form-group">
+						<label for="exampleInputPassword1">Correo Electronico</label>
+						<input
+							type="email"
+							name="email"
+							placeholder="Email"
+							value={formDataMod.email}
+							onChange={(i) => setFormDataMod({ ...formDataMod, email: i.target.value })}
+							required
+							className="form-control"
+						/>
+					</div>
+
+					<div className="form-group">
+						<label for="exampleInputPassword1">Dirección</label>
+						<input
+							type="text"
+							name="address"
+							placeholder="Dirección"
+							value={formDataMod.address}
+							onChange={(i) => setFormDataMod({ ...formDataMod, address: i.target.value })}
+							required
+							className="form-control"
+						/>
+					</div>
+					
+					<button type="submit" className="btn btn-success m-3">Modificar Contacto</button>
+				</form>
+
+			</div>
+			
+        </div>
+    );
 };
